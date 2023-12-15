@@ -1,0 +1,8 @@
+drop table estudiante;
+CREATE TABLE estudiante(
+    apellido varchar2(30) NOT NULL,
+    domicilio varchar2(30),
+    telefono varchar2(11)
+);
+describe estudiante;
+SELECT * FROM ALL_TABLES;

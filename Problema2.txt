@@ -1,0 +1,14 @@
+CREATE TABLE programas(
+    titulo varchar2(20),
+    lenguaje varchar2(30),
+    sistema_operativo varchar2(15)
+);
+CREATE TABLE programas(
+    titulo varchar2(20),
+    lenguaje varchar2(30),
+    sistema_operativo varchar2(15)
+);
+describe programas;
+SELECT * FROM ALL_TABLES;
+drop table programas;
+drop table programas;

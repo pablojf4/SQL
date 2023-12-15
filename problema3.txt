@@ -1,0 +1,61 @@
+DROP TABLE CLIENTES;
+DROP TABLE PROVINCIAS;
+create table clientes (
+ codigo number(5),
+ nombre varchar2(30),
+ domicilio varchar2(30),
+ ciudad varchar2(20),
+ codigoprovincia number(2)
+);
+create table provincias(
+ codigo number(2),
+ nombre varchar2(20)
+);
+
+describe clientes;
+describe provincias;
+
+ALTER TABLE CLIENTES ADD CONSTRAINT FK_CLIENTES_CODIGOPROVINCIA
+FOREIGN KEY (codigoprovincia) REFERENCES provincias(codigo);
+
+ALTER TABLE PROVINCIAS
+ADD CONSTRAINT UK_PROVINCIAS_CODIGO
+UNIQUE(codigo);
+
+insert into provincias values(1,'Cordoba');
+insert into provincias values(2,'Santa Fe');
+insert into provincias values(3,'Misiones');
+insert into provincias values(4,'Rio Negro');
+insert into clientes values(100,'Garcia Jose','San Martin 123','Carlos Paz',1);
+insert into clientes values(101,'Meca Mariano','Colon 234','Rosario',2);
+insert into clientes values(102,'Sanchez Luis','Avellaneda 333','Posadas',3);
+insert into clientes values(103,'Maria Perez','Juarez 555','La Plata',6);
+
+select * from provincias;
+select * from clientes;
+
+alter table clientes
+add constraint FK_clientes_codigoprovincia
+foreign key (codigoprovincia)
+references provincias(codigo);
+
+delete from clientes where codigoprovincia=6;
+
+alter table clientes
+add constraint FK_clientes_codigoprovincia
+foreign key (codigo provincia)
+references provincias(codigo);
+
+delete from clientes where codigo=3;
+delete from clientes where codigo=4;
+
+update provincias set codigo=7 where codigo=1;
+
+select constraint_name, constraint_type
+from user_constraints
+where table_name='PROVINCIAS';
+
+ALTER TABLE CLIENTES
+DROP CONSTRAINT FK_CLIENTES_CODIGOPROVINCIA;
+
+DROP TABLE PROVINCIAS;
