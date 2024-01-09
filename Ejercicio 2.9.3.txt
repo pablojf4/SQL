@@ -1,0 +1,97 @@
+create table empleados(
+    dni number(8) primary key,
+    nombre varchar(10) not null,
+    apellido1 varchar(15),
+    apellido2 varchar(15),
+    direcc1 varchar(25),
+    direcc2 varchar(20),
+    ciudad varchar(20),
+    provincia varchar(20),
+    cod_postal varchar(5),
+    sexo varchar(1) check (sexo='H' or sexo='M'),
+    fecha_nac date
+    );
+
+create table departamentos(
+    dpto_cod number(5) primary key,
+    nombre_dpto varchar(30) not null constraint uk_nombre_dpto unique,
+    dpto_padre number(5),
+    presupuesto number not null,
+    pres_actual number
+);
+create table estudios(
+    empleado_dni number(8),
+    universidad number(5),
+    año number,
+    grado varchar(3),
+    especialidad varchar(20),
+    primary key(empleado_dni, universidad, especialidad)
+);
+create table historial_laboral(
+    empleado_dni number(8),
+    trabajo_cod number(5),
+    fecha_inicio date,
+    fecha_fin date,
+    dpto_cod number(5),
+    supervisor_dni number(8),
+    primary key(empleado_dni, trabajo_cod, fecha_inicio)
+);
+create table universidades(
+    univ_cod number(5) primary key,
+    nombre_univ varchar(25) not null,
+    ciudad varchar(20),
+    municipio varchar(2),
+    cod_postal varchar(5)
+);
+create table historial_salarial(
+    empleado_dni number(8),
+    salario number not null,
+    fecha_comienzo date,
+    fecha_fin date,
+    primary key(empleado_dni, salario, fecha_comienzo)
+);
+create table trabajos(
+    trabajo_cod number(5) primary key,
+    nombre_trab varchar(20) not null constraint uk_nombre_trab unique,
+    salario_min number(2) not null,
+    salario_max number(2) not null
+);
+alter table historial_salarial
+add constraint fk_historial_salarial_empleado
+foreign key(empleado_dni)
+references empleados(dni);
+
+alter table historial_laboral
+add constraint fk_historial_laboral_empleado
+foreign key(empleado_dni)
+references empleados(dni);
+
+alter table historial_laboral
+add constraint fk_historial_laboral_trabajo
+foreign key(trabajo_cod)
+references trabajos(trabajo_cod);
+
+alter table historial_laboral
+add constraint fk_historial_laboral_supervisor
+foreign key(supervisor_dni)
+references empleados(dni);
+
+alter table historial_laboral
+add constraint fk_historial_laboral_dpto
+foreign key(dpto_cod)
+references departamentos(dpto_cod);
+
+alter table estudios
+add constraint fk_estudios_empleado
+foreign key(empleado_dni)
+references empleados(dni);
+
+alter table estudios
+add constraint fk_estudios_universidad
+foreign key(universidad)
+references universidades(univ_cod);
+
+alter table departamentos
+add constraint fk_departamentos_padre
+foreign key(dpto_padre)
+references departamentos(dpto_cod)
