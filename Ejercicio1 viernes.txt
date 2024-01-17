@@ -1,0 +1,36 @@
+create table profesores(
+    nombre varchar2(15) 
+    constraint pro_nom_uk unique,
+    apellido1 varchar2(15),
+    apellido2 varchar2(15),
+    nif varchar2(9)
+    constraint pro_nif_pk primary key,
+    direccion varchar2(50),
+    titulacion varchar2(15),
+    salario number(9) not null
+);
+create table alumnos(
+    nombre varchar2(15),
+    apellido1 varchar2(15),
+    apellido2 varchar2(15),
+    nif varchar2(9) 
+    constraint alum_nif_pk primary key,
+    direccion varchar2(40),
+    sexo varchar2(1) 
+    constraint alum_sex_ck check (sexo in('M','H')),
+    fechaNac date,
+    cursoMatricula varchar2(10) not null
+    constraint alum_cur_fk references cursos
+);
+create table cursos(
+    nombreCurso varchar2(15)
+    constraint cur_nom_uk unique,
+    codigoCurso varchar2(15)
+    constraint cur_cod_pk primary key,
+    nifProfesor varchar2(9)
+    constraint cur_nifp_fk references profesores,
+    maximoNumAlum number(2),
+    fechaInicio date,
+    fechaFin date,
+    NumHoras number(4) not null,
+    constraint cur_fec_ck check (fechaInicio<fechaFin));

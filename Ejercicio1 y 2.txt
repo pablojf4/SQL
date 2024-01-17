@@ -1,0 +1,54 @@
+create table profesores(
+    nombre varchar2(15) 
+    constraint pro_nom_uk unique,
+    apellido1 varchar2(15),
+    apellido2 varchar2(15),
+    nif varchar2(9)
+    constraint pro_nif_pk primary key,
+    direccion varchar2(50),
+    titulacion varchar2(15),
+    salario number(9) not null
+);
+
+create table cursos(
+    nombreCurso varchar2(15)
+    constraint cur_nom_uk unique,
+    codigoCurso varchar2(15)
+    constraint cur_cod_pk primary key,
+    nifProfesor varchar2(9)
+    constraint cur_nifp_fk references profesores,
+    maximoNumAlum number(2),
+    fechaInicio date,
+    fechaFin date,
+    numHoras number(4) not null,
+    constraint cur_fec_ck check (fechaInicio<fechaFin));
+
+create table alumnos(
+    nombre varchar2(15),
+    apellido1 varchar2(15),
+    apellido2 varchar2(15),
+    nif varchar2(9) 
+    constraint alum_nif_pk primary key,
+    direccion varchar2(40),
+    sexo varchar2(1) 
+    constraint alum_sex_ck check (sexo in('M','H')),
+    fechaNac date,
+    cursoMatricula varchar2(10) not null
+    constraint alum_cur_fk references cursos
+);
+alter table alumnos add(
+    edad number(2)
+);
+alter table alumnos add constraint alu_eda_ck check (edad between 14 and 65);
+alter table cursos add constraint cur_hor_ck check (numHoras in(30,40,60));
+alter table cursos add constraint cur_numAlum_ck check(maximoNumAlum>15);
+
+alter table alumnos drop constraint alum_sex_ck;
+alter table profesores drop column direccion;
+alter table cursos drop constraint cur_nifp_fk;
+alter table profesores drop constraint pro_nif_pk;
+alter table profesores add constraint pro_nomap1ap2_pk primary key(nombre, apellido1, apellido2);
+rename profesores to tutores;
+alter table alumnos modify nombre varchar2(15) not null;
+alter table alumnos modify apellido1 varchar2(15) not null;
+drop table alumnos;
