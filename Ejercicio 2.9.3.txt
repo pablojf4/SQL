@@ -108,6 +108,116 @@ references trabajos(trabajo_cod);
 alter table historial_laboral
 add constraint fk_historial_laboral_supervisor
 foreign key(supervisor_dni)
+create table empleados(
+    dni number(8) primary key,
+    nombre varchar(10) not null,
+    apellido1 varchar(15) not null,
+    apellido2 varchar(15),
+    direcc1 varchar(25),
+    direcc2 varchar(20),
+    ciudad varchar(20),
+    provincia varchar(20),
+    cod_postal varchar(5),
+    sexo varchar(1) check (sexo='H' or sexo='M'),
+    fecha_nac date
+    );
+
+create table departamentos(
+    dpto_cod number(5) primary key,
+    nombre_dpto varchar(30) not null constraint uk_nombre_dpto unique,
+    dpto_padre number(5),
+    presupuesto number not null,
+    pres_actual number
+);
+create table estudios(
+    empleado_dni number(8),
+    universidad number(5),
+    año number,
+    grado varchar(3),
+    especialidad varchar(20),
+    primary key(empleado_dni, universidad, especialidad)
+);
+create table historial_laboral(
+    empleado_dni number(8),
+    trabajo_cod number(5),
+    fecha_inicio date,
+create table empleados(
+    dni number(8) primary key,
+    nombre varchar(10) not null,
+    apellido1 varchar(15) not null,
+    apellido2 varchar(15),
+    direcc1 varchar(25),
+    direcc2 varchar(20),
+    ciudad varchar(20),
+    provincia varchar(20),
+    cod_postal varchar(5),
+    sexo varchar(1) check (sexo='H' or sexo='M'),
+    fecha_nac date
+    );
+create table departamentos(
+    dpto_cod number(5) primary key,
+    nombre_dpto varchar(30) not null constraint uk_nombre_dpto unique,
+    dpto_padre number(5),
+    presupuesto number not null,
+    pres_actual number
+);
+
+create table estudios(
+    empleado_dni number(8),
+    universidad number(5),
+    año number,
+    grado varchar(3),
+    especialidad varchar(20),
+    primary key(empleado_dni, universidad, especialidad)
+);
+create table historial_laboral(
+    empleado_dni number(8),
+    trabajo_cod number(5),
+    fecha_inicio date,
+    fecha_fin date,
+    dpto_cod number(5),
+    supervisor_dni number(8),
+    primary key(empleado_dni, trabajo_cod, fecha_inicio)
+);
+create table universidades(
+    univ_cod number(5) primary key,
+    nombre_univ varchar(25) not null,
+    ciudad varchar(20),
+    municipio varchar(2),
+    cod_postal varchar(5)
+);
+create table historial_salarial(
+    empleado_dni number(8),
+    salario number not null,
+    fecha_comienzo date,
+    fecha_fin date,
+    primary key(empleado_dni, salario, fecha_comienzo)
+);
+
+create table trabajos(
+    trabajo_cod number(5) primary key,
+    nombre_trab varchar(20) not null constraint uk_nombre_trab unique,
+    salario_min number(2) not null,
+    salario_max number(2) not null
+);
+alter table historial_salarial
+add constraint fk_historial_salarial_empleado
+foreign key(empleado_dni)
+references empleados(dni);
+
+alter table historial_laboral
+add constraint fk_historial_laboral_empleado
+foreign key(empleado_dni)
+references empleados(dni);
+
+alter table historial_laboral
+add constraint fk_historial_laboral_trabajo
+foreign key(trabajo_cod)
+references trabajos(trabajo_cod);
+
+alter table historial_laboral
+add constraint fk_historial_laboral_supervisor
+foreign key(supervisor_dni)
 references empleados(dni);
 
 alter table historial_laboral
@@ -132,6 +242,35 @@ add constraint fk_departamentos_padre
 foreign key(dpto_padre)
 references departamentos(dpto_cod);
 
+insert into empleados values(
+12345678, 'Nombre1', 'Apellido1', 'Apellido2', 'Direcc1','Direcc2', 'Ciudad1', 'Provincia1', '12345', 'H'
+, '1990-01-01'),
+    (87654321, 'Nombre1', 'Apellido1', 'Apellido2', 'Direcc1','Direcc2', 'Ciudad1', 'Provincia1', '12345', 'H'
+, '1990-01-01');
+INSERT INTO departamentos VALUES 
+(1, 'Departamento1', NULL, 100000, 80000),
+(2, 'Departamento2', 1, 80000, 60000);
+
+INSERT INTO estudios VALUES 
+(12345678, 1, 2010, 'BSc', 'Informática'),
+(87654321, 2, 2015, 'MSc', 'Ingeniería de Software');
+
+INSERT INTO historial_laboral VALUES 
+(12345678, 1, '2010-01-01', '2015-01-01', 1, 87654321),
+(87654321, 2, '2015-01-02', NULL, 2, 12345678);
+
+INSERT INTO universidades VALUES 
+(1, 'Universidad1', 'CiudadUni1', 'MU', '54321'),
+(2, 'Universidad2', 'CiudadUni2', 'MU', '12345');
+
+INSERT INTO historial_salarial VALUES 
+(12345678, 70000, '2010-01-01', '2015-01-01'),
+(87654321, 90000, '2015-01-02', NULL);
+
+INSERT INTO trabajos VALUES 
+(1, 'Trabajo1', 60000, 80000),
+(2, 'Trabajo2', 80000, 100000);
+
 insert into empleados(
 nombre, apellido1, apellido2, dni, sexo)
 values(
@@ -147,4 +286,84 @@ insert into historial_laboral(
     values(
     '111222', Null, '16/06/96', null, '222333', null);
    
+UPDATE historial_laboral
+SET supervisor_dni = 99999999 -- DNI que no existe en la tabla empleados
+WHERE empleado_dni = 111222 AND trabajo_cod = 2 AND fecha_inicio = '2015-01-02';
 
+DELETE FROM universidades
+WHERE univ_cod = 1;
+ALTER TABLE estudios
+DROP CONSTRAINT fk_estudios_universidad; -- Eliminar la restricción existente
+
+-- Agregar la nueva restricción con la opción ON DELETE CASCADE
+ALTER TABLE estudios
+ADD CONSTRAINT fk_estudios_universidad
+FOREIGN KEY (universidad)
+REFERENCES universidades(univ_cod)
+ON DELETE CASCADE;
+
+CREATE OR REPLACE TRIGGER cod_postal_check 
+ BEFORE INSERT OR UPDATE
+ OF ciudad, cod_postal
+ ON empleados
+ FOR EACH ROW 
+ WHEN (:new.ciudad is not null) 
+  BEGIN 
+   IF (:new.cod_postal is null) 
+   THEN raise_application_error (
+    ­666, 'El código postal no puede ser null si la ciudad no lo 
+es'); 
+   END IF; 
+  END;
+
+ALTER TABLE empleados
+ ADD valoracion NUMBER DEFAULT 5 ;
+ALTER TABLE empleados
+ ADD CONSTRAINR ck_valoracion
+ CHECK (valoración BETWEEN 1 AND 10) ;
+
+ALTER TABLE empleado MODIFY nombre VARCHAR(10) NULL ;
+
+ALTER TABLE empleados MODIFY direcc1 VARCHAR(40) ;
+
+ALTER TABLE empleados DROP CONSTRAINT pk_empleados ;
+ALTER TABLE empleados ADD CONSTRAINT pk_empleados PRIMARY KEY 
+(nombre, apellido1, apellido2) ;
+
+CREATE TABLE información_universitaria
+AS SELECT
+    nombre||’ ‘||apellido1||’ ‘||apellido2 as nombre_empl,
+    nombre_univ as nombre_univ
+FROM
+    empleados e,
+    estudios es,
+    univeridad u
+WHERE
+    e.dni=es.empleado_dni
+    AND es.universidad=u.univ_cod;
+
+CREATE VIEW empleados_malaga
+AS SELECT
+    nombre||’ ‘||apellido1||’ ‘||apellido2 as nombre_empl
+FROM
+    empleados
+WHERE
+    municipio=’Málaga’;
+
+CREATE VIEW información_empleados
+AS SELECT
+    nombre||’ ‘||apellido1||’ ‘||apellido2 as nombre_empl,
+    round(SYSDATE­fecha_nacimiento/365) edad
+FROM
+    empleados
+
+CREATE VIEW informacion_actual
+AS SELECT
+    nombre_empl,
+    salario
+FROM
+    informacion_empleados ie,
+    historial_salarial hs
+WHERE
+    ie.dni=hs.empleado_dni
+    AND fecha_fin IS NULL;
