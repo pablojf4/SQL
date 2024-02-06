@@ -115,3 +115,39 @@ select avg(SAL) from EMP where ENAME like 'J%'
 --7 Mostrar la suma del salario de los empleados cuyo salario es superior a 1.800.
 select sum(SAl) from EMP where SAL>1800;
 --8 . ¿Cuantos oficios diferentes hay en el dpto 10?
+select count(distinct JOB) from EMP where DEPTNO=10;
+--9 Mostrar para los empleados del dpto 20 el mensaje ‘Ename gana SAL Euros’. El campo ENAME esta la primera en mayúscula y las siguientes en minúscula.
+SELECT UPPER(SUBSTR(ENAME,1,1)), LOWER(SUBSTR(ENAME,2)), ' gana',SAL, 'EUROS' FROM EMP WHERE DEPTNO = 20;
+--10 Mostrar todos los empleados cuyo nombre tiene cinco o más caracteres
+SELECT * FROM EMP WHERE LENGTH(ENAME) >= 5;
+--11 Mostrar la media del salario de los empleados cuyo oficio tenga 7 caracteres.
+select avg(SAL) from EMP where Length(JOB)=7;
+--12 Mostrar el nombre añadiendo un * por la derecha y dicho nombre añadiendo un asterisco por la izquierda a todos los empleados del dpto 10. En ambos casos se debe alcanzar una longitud de 10 caracteres
+SELECT 
+    RPAD('*', 5, '*') || ENAME || LPAD('*', 4, '*') AS NOMBRE
+FROM 
+    EMP
+WHERE 
+    DEPTNO = 10;
+--13 Eliminar los caracteres asterisco a las cadenas '*****PEPITO', 'MANOLITA*****' y a la cadena de caracteres '*******LOLO*****'. 
+SELECT REPLACE('*****PEPITO', '*', '') AS resultado from DUAL;
+SELECT REPLACE('MANOLITA*****', '*', '') AS resultado from DUAL;
+SELECT REPLACE('*******LOLO*****', '*', '') AS resultado from DUAL;
+--14 . Mostrar la fecha correspondiente a cinco meses después de la fecha del sistema
+select add_months(sysdate,5) from dual;
+--15 Mostrar el último día de este mes.
+select last_day(sysdate) from dual;
+--16 Mostrar cuantos meses llevan trabajando los empleados cuyo oficio es MANAGER. Redondear el resultado a dos decimales.
+select round(months_between(sysdate, hiredate),2) from EMP where JOB = 'MANAGER';
+--17 Mostrar cuantos meses, años y trienios cumplidos llevan trabajando los empleados cuyo oficio es MANAGER. Redondear el resultado a dos decimales.
+select round(months_between(sysdate,hiredate),2), round(months_between(sysdate,hiredate)/12,2), round(months_between(sysdate,hiredate)/36,2) from EMP where JOB='MANAGER';
+--18 Mostrar la fecha del primer lunes que trabajaron los empleados del dpto 10.
+select EMPNO, ENAME, next_day(hiredate-7, 'MONDAY') from EMP where DEPTNO=10;
+--19 Mostrar para todos los empleados que sean CLERK la fecha de ingreso, diez días más y diez días menos.
+SELECT ENAME, HIREDATE, hiredate+10,hiredate-10 FROM EMP WHERE JOB = 'CLERK';
+--20 Mostrar un listado con el nombre, salario y comisión de los empleados del dpto 30. si no tiene comisión, poner 0.
+select ENAME, SAL, COALESCE(COMM,0)from EMP where DEPTNO=30;
+-- OTRA FORMA DE HACERLO
+SELECT ENAME, SAL, NVL(COMM,0) FROM EMP WHERE DEPTNO=30;
+--21 . Mostrar un listado con el nombre, salario, comisión y el total de lo que va a cobrar de los empleados del dpto 30. si no tiene comisión, poner ‘---’.
+select ENAME, SAL, COALESCE(COMM,'---') FROM EMP WHERE DEPTNO=30;
