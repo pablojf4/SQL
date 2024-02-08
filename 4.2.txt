@@ -151,3 +151,76 @@ select ENAME, SAL, COALESCE(COMM,0)from EMP where DEPTNO=30;
 SELECT ENAME, SAL, NVL(COMM,0) FROM EMP WHERE DEPTNO=30;
 --21 . Mostrar un listado con el nombre, salario, comisión y el total de lo que va a cobrar de los empleados del dpto 30. si no tiene comisión, poner ‘---’.
 select ENAME, SAL, COALESCE(COMM,'---') FROM EMP WHERE DEPTNO=30;
+--22 Para todos los empleados cuyo nombre tiene una A, mostrar un listado con el nombre, comisión y la cadena 'TIENE' en el caso de que tenga comisión y 'NO TIENE' en caso contrario
+select ename, case when comm is null then'NO TIENE' else 'TIENE'end as COMISION from EMP where ENAME like '%A%';
+--23 Mostrar un salario formateado de los empleados del dpto 20.
+select to_char(sal,'FM9999.00') from EMP where deptno=20;
+--24 Mostrar el nombre la fecha y la fecha en formato 'DD-MM-YYYY' de todos empleados que sean CLERK.
+select hiredate, to_char(hiredate,'DD-MM-YYYY') from EMP where JOB='CLERK';
+--25 Mostrar el nombre y la fecha de entrada de los empleados que han entrado en la empresa en el mes de Febrero
+select ename, hiredate from EMP where to_char(hiredate,'MM')='02';
+--26 ¿Cuantos empleados entraron a trabajar un Viernes?
+select count(*) from EMP where to_char(hiredate,'DAY')='FRIDAY';
+--27 Hacer un listado de los nombres de empleado que tienen un letra A, una letra C o bien tiene las dos letras.
+SELECT ENAME FROM EMP WHERE ENAME LIKE '%A%'OR ENAME LIKE'%C%';
+--28 Mostrar un listado con el nombre, fecha de entrada y la cadena 'PRIMER TRAMO', si entraron a trabajar desde Enero a Junio, 'SEGUNDO TRAMO' si entraron a trabajar desde Julio a Octubre 'TERCER TRAMO' y en caso contrario
+SELECT ENAME, HIREDATE, CASE WHEN TO_CHAR(HIREDATE,'MM') BETWEEN '01' AND '06' THEN 'PRIMER TRAMO'
+WHEN TO_CHAR(HIREDATE,'MM') BETWEEN '07' AND '10' THEN 'SEGUNDO TRAMO'
+ELSE 'TERCER TRAMO' END AS TRAMO FROM EMP;
+--29 Mostrar la suma del salario de los empleados cuyo salario es superior a 1.800
+SELECT SUM(SAL) FROM EMP WHERE SAL>1800;
+--30  ¿Cuantos oficios diferentes hay en el dpto 10?
+SELECT COUNT(DISTINCT JOB) FROM EMP WHERE DEPTNO=10;
+--31 Mostrar la media del salario de los empleados cuyo oficio tenga 7 caracteres
+SELECT AVG(SAL) FROM EMP WHERE LENGTH(JOB)=7;
+--1 Mostrar la media de los salarios de cada uno de los empleados agrupados por departamento.
+SELECT AVG(SAL) FROM EMP GROUP BY DEPTNO;
+--2 Obtener la media del salario agrupados los datos por departamento y después por trabajo.
+SELECT AVG(SAL) FROM EMP GROUP BY DEPTNO;
+SELECT AVG(SAL) FROM EMP GROUP BY JOB;
+--3 Número de empleados en cada departamento.
+SELECT DEPTNO, COUNT(*) FROM EMP GROUP BY DEPTNO;
+--4 . Muestra el salario más comisión y renómbrala como nómina de los empleados de cada uno de los departamentos
+SELECT DEPTNO, COALESCE(SAL + COMM, SAL) AS NOMINA
+FROM EMP;
+--5 . Nómina media de cada uno de los departamentos sin contar los que tienen valor nulo en la comisión.
+SELECT DEPTNO, AVG(SAL+COMM) FROM EMP WHERE COMM IS NOT NULL GROUP BY DEPTNO;
+--6 Nómina media de cada uno de los departamentos contando los que tienen valor nulo en la comisión.
+SELECT DEPTNO, AVG(COALESCE(SAL + COMM, SAL)) AS NOMINA_MEDIA
+FROM EMP
+GROUP BY DEPTNO;
+--7 Menor y mayor salario de cada uno de los departamentos.
+SELECT DEPTNO, MIN(SAL),MAX(SAL) FROM EMP GROUP BY DEPTNO;
+--8 Menor y mayor comisión de cada uno de los departamentos.
+SELECT DEPTNO, MIN(COALESCE(COMM,0)), MAX(COALESCE(COMM,0)) FROM EMP L GROUP BY DEPTNO;
+--9 Cuenta el número de empleados que hay de cada oficio
+SELECT JOB,COUNT(*) FROM EMP GROUP BY JOB;
+--10 ¿Cuál es el menor y mayor salario de cada oficio?
+SELECT JOB AS OFICIO, MIN(SAL), MAX(SAL) FROM EMP GROUP BY JOB;
+--11 ¿Cuántos subordinados tiene cada empleado?
+SELECT MGR, COUNT(*) FROM EMP GROUP BY MGR;
+--12 ¿Cuántas clases de oficio hay en la empresa?
+SELECT COUNT(DISTINCT JOB) FROM EMP;
+--13 ¿Cuántos oficios diferentes hay en cada departamento?
+SELECT DEPTNO, COUNT(DISTINCT JOB) FROM EMP GROUP BY DEPTNO;
+--14. Muestra el número de departamento y la media de los salarios para los empelados que son president o manager
+SELECT DEPTNO, AVG(SAL) FROM EMP WHERE JOB='PRESIDENT' OR JOB='MANAGER' GROUP BY DEPTNO;
+--15 Cuantos ‘CLERK’ y cuantos ‘ANALYST’ hay en cada departamento
+SELECT 
+    DEPTNO,
+    SUM(CASE WHEN JOB = 'CLERK' THEN 1 ELSE 0 END) AS NUM_CLERK,
+    SUM(CASE WHEN JOB = 'ANALYST' THEN 1 ELSE 0 END) AS NUM_ANALYST
+FROM 
+    EMP
+GROUP BY 
+    DEPTNO;
+--16 Mostrar un listado de cuantos empleados han entrado a trabajar en un mes par y ganan menos de 3000 agrupado por departamentos.
+SELECT DEPTNO, COUNT(*) FROM EMP WHERE MOD(EXTRACT(MONTH FROM HIREDATE),2)=0 AND SAL<3000 GROUP BY DEPTNO;
+--17 ¿Qué departamentos su media salarial es mayor que 2000?
+SELECT DEPTNO, AVG(SAL) FROM EMP GROUP BY DEPTNO HAVING AVG(SAL)>2000;
+--18 Que departamentos tienen dos o más empleados con una ‘A’ en su nombre
+SELECT DEPTNO FROM EMP WHERE ENAME LIKE '%A%' GROUP BY DEPTNO HAVING COUNT(*)>=2;
+--19 Mostrar oficio, máximo salario, mínimo salario de todos los empleados que han entrado a trabajar en 1981 organizados por oficios y su media salarial del oficio sea menor de 2000.
+SELECT JOB, MAX(SAL), MIN(SAL) FROM EMP WHERE EXTRACT(YEAR FROM HIREDATE)=1981 GROUP BY JOB HAVING AVG(SAL)<2000;
+--20 Agrupar los empelados por oficio y departamento indicando el máximo salario para todos los empelados que ganen más de 1200 y su oficio tenga más de dos empleados
+SELECT JOB, DEPTNO, MAX(SAL) FROM EMP WHERE SAL>1200 GROUP BY JOB,DEPTNO HAVING COUNT(*)>2;
