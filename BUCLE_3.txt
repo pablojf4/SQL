@@ -1,0 +1,13 @@
+DECLARE
+    contador NUMBER := 0;
+    numero NUMBER := 1;
+    tres NUMBER := 3;
+BEGIN
+    WHILE contador < 5 LOOP
+        IF MOD(numero, tres) = 0 THEN
+            DBMS_OUTPUT.PUT_LINE('El número ' || numero || ' es múltiplo de 3');
+            contador := contador + 1;
+        END IF;
+        numero := numero + 1;
+    END LOOP;
+END;
