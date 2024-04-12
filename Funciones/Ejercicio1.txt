@@ -1,0 +1,17 @@
+
+create or replace function encontrar_menor (num1 NUMBER, num2 NUMBER, num3 NUMBER)
+  return number
+ AS
+    menor NUMBER;
+ begin 
+   menor:= LEAST(num1,num2,num3);
+RETURN MENOR;
+ end;
+/
+
+DECLARE
+resultado NUMBER;
+BEGIN
+resultado:=encontrar_menor(2,6,9);
+DBMS_OUTPUT.PUT_LINE('El menor es: '|| resultado);
+END;

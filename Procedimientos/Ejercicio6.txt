@@ -1,0 +1,17 @@
+
+-- Procedimiento para mostrar los divisores de un número
+CREATE OR REPLACE PROCEDURE mostrar_divisores(numero IN INTEGER) IS
+    divisor INTEGER := 1;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Divisores de ' || numero || ':');
+    WHILE divisor <= numero LOOP
+        IF (MOD(numero,divisor) = 0) THEN
+            DBMS_OUTPUT.PUT_LINE(divisor);
+        END IF;
+        divisor := divisor + 1;
+    END LOOP;
+END;
+/
+BEGIN
+mostrar_divisores(10);
+END;

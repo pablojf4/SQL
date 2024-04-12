@@ -1,0 +1,25 @@
+
+CREATE OR REPLACE FUNCTION es_bisiesto(anio IN NUMBER) 
+RETURN BOOLEAN
+AS
+BEGIN
+    IF (MOD(anio, 4) = 0 AND MOD(anio, 100) != 0) OR MOD(anio, 400) = 0 THEN
+        RETURN TRUE;
+    ELSE
+        RETURN FALSE;
+    END IF;
+END;
+/
+
+    DECLARE
+    anio_a_verificar NUMBER := 2024; -- Puedes cambiar el año aquí
+    es_bisiesto_result BOOLEAN;
+BEGIN
+    es_bisiesto_result := es_bisiesto(anio_a_verificar);
+    IF es_bisiesto_result THEN
+        DBMS_OUTPUT.PUT_LINE('El año ' || anio_a_verificar || ' es bisiesto.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('El año ' || anio_a_verificar || ' no es bisiesto.');
+    END IF;
+END;
+/

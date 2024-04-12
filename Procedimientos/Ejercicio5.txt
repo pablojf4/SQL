@@ -1,0 +1,43 @@
+
+-- Procedimiento para imprimir la tabla de multiplicar usando LOOP
+CREATE OR REPLACE PROCEDURE tabla_multiplicar_loop(numero IN INTEGER) IS
+    multiplicador INTEGER := 1;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Tabla de multiplicar del número ' || numero || ' (usando LOOP):');
+    LOOP
+        EXIT WHEN multiplicador > 10;
+        DBMS_OUTPUT.PUT_LINE(numero || ' x ' || multiplicador || ' = ' || numero * multiplicador);
+        multiplicador := multiplicador + 1;
+    END LOOP;
+END;
+/
+
+-- Procedimiento para imprimir la tabla de multiplicar usando WHILE
+CREATE OR REPLACE PROCEDURE tabla_multiplicar_while(numero IN INTEGER) IS
+    multiplicador INTEGER := 1;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Tabla de multiplicar del número ' || numero || ' (usando WHILE):');
+    WHILE multiplicador <= 10 LOOP
+        DBMS_OUTPUT.PUT_LINE(numero || ' x ' || multiplicador || ' = ' || numero * multiplicador);
+        multiplicador := multiplicador + 1;
+    END LOOP;
+END;
+/
+
+-- Procedimiento para imprimir la tabla de multiplicar usando FOR
+CREATE OR REPLACE PROCEDURE tabla_multiplicar_for(numero IN INTEGER) IS
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Tabla de multiplicar del número ' || numero || ' (usando FOR):');
+    FOR multiplicador IN 1..10 LOOP
+        DBMS_OUTPUT.PUT_LINE(numero || ' x ' || multiplicador || ' = ' || numero * multiplicador);
+    END LOOP;
+END;
+/
+
+BEGIN
+    tabla_multiplicar_loop(5);
+    tabla_multiplicar_while(7);
+    tabla_multiplicar_for(9);
+END;
+/
+

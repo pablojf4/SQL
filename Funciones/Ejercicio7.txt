@@ -1,0 +1,27 @@
+CREATE OR REPLACE FUNCTION fibonacci(numero IN NUMBER) RETURN VARCHAR2 IS
+    fibo_sequence VARCHAR2(4000) := 'Serie de Fibonacci hasta ' || numero || ': ';
+    a NUMBER := 0;
+    b NUMBER := 1;
+    next_term NUMBER;
+BEGIN
+    fibo_sequence := fibo_sequence || a || ' ' || b || ' ';
+    
+    WHILE (a + b) <= numero LOOP
+        next_term := a + b;
+        fibo_sequence := fibo_sequence || next_term || ' ';
+        a := b;
+        b := next_term;
+    END LOOP;
+    
+    RETURN fibo_sequence;
+END;
+/
+
+DECLARE
+    num NUMBER := 50;
+    fibo_series VARCHAR2(4000);
+BEGIN
+    fibo_series := fibonacci(num);
+    DBMS_OUTPUT.PUT_LINE(fibo_series);
+END;
+/

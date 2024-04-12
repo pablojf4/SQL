@@ -1,0 +1,26 @@
+
+
+-- Procedimiento para generar la serie de Fibonacci hasta un número dado
+CREATE OR REPLACE PROCEDURE fibonacci(n IN INTEGER) IS
+    a INTEGER := 0;
+    b INTEGER := 1;
+    c INTEGER;
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Serie de Fibonacci hasta el número ' || n || ':');
+    DBMS_OUTPUT.PUT_LINE(a);
+    DBMS_OUTPUT.PUT_LINE(b);
+    WHILE b <= n LOOP
+        c := a + b;
+        IF c <= n THEN
+            DBMS_OUTPUT.PUT_LINE(c);
+        END IF;
+        a := b;
+        b := c;
+    END LOOP;
+END;
+/
+
+BEGIN
+    fibonacci(50);
+END;
+/

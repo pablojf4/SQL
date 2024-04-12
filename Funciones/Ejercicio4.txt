@@ -1,0 +1,27 @@
+CREATE OR REPLACE FUNCTION factorial(numero IN NUMBER) 
+RETURN NUMBER 
+AS
+    resultado NUMBER := 1;
+BEGIN
+    IF numero < 0 THEN
+        RETURN NULL;
+    ELSIF numero = 0 THEN
+        RETURN 1;
+    ELSE
+        FOR i IN 1..numero LOOP
+            resultado := resultado * i;
+        END LOOP;
+        RETURN resultado;
+    END IF;
+END;
+/
+
+DECLARE
+    num NUMBER := 5;
+    fact NUMBER;
+BEGIN
+    fact := factorial(num);
+    DBMS_OUTPUT.PUT_LINE('El factorial de ' || num || ' es: ' || fact);
+END;
+/
+

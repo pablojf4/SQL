@@ -1,0 +1,42 @@
+CREATE OR REPLACE FUNCTION tabla_multiplicar(numero IN NUMBER) 
+RETURN VARCHAR2 
+AS
+    resultado VARCHAR2(4000);
+    i NUMBER := 1;
+BEGIN
+    resultado := 'Tabla de multiplicar del ' || numero || ':' || CHR(10);
+    
+    -- Utilizando WHILE loop
+    resultado := resultado || 'Utilizando WHILE loop:' || CHR(10);
+    WHILE i <= 10 LOOP
+        resultado := resultado || numero || ' x ' || i || ' = ' || (numero * i) || CHR(10);
+        i := i + 1;
+    END LOOP;
+    
+    -- Utilizando LOOP
+    resultado := resultado || CHR(10) || 'Utilizando LOOP:' || CHR(10);
+    i := 1;
+    LOOP
+        EXIT WHEN i > 10;
+        resultado := resultado || numero || ' x ' || i || ' = ' || (numero * i) || CHR(10);
+        i := i + 1;
+    END LOOP;
+    
+    -- Utilizando FOR loop
+    resultado := resultado || CHR(10) || 'Utilizando FOR loop:' || CHR(10);
+    FOR j IN 1..10 LOOP
+        resultado := resultado || numero || ' x ' || j || ' = ' || (numero * j) || CHR(10);
+    END LOOP;
+    
+    RETURN resultado;
+END;
+/
+
+DECLARE
+    num NUMBER := 5;
+    tabla VARCHAR2(4000);
+BEGIN
+    tabla := tabla_multiplicar(num);
+    DBMS_OUTPUT.PUT_LINE(tabla);
+END;
+/

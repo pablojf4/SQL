@@ -1,0 +1,28 @@
+
+
+CREATE OR REPLACE PROCEDURE es_bisiesto (
+    anio IN NUMBER,
+    es_bisiesto OUT BOOLEAN
+)
+IS
+BEGIN
+    IF (MOD(anio, 4) = 0 AND MOD(anio, 100) != 0) OR (MOD(anio, 400) = 0) THEN
+        es_bisiesto := TRUE;
+    ELSE
+        es_bisiesto := FALSE;
+    END IF;
+END;
+/
+
+DECLARE
+    anio INT := 2024;
+    bisiesto BOOLEAN;
+BEGIN
+    es_bisiesto(anio, bisiesto);
+    IF bisiesto THEN
+        DBMS_OUTPUT.PUT_LINE('El año ' || anio || ' es bisiesto.');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('El año ' || anio || ' no es bisiesto.');
+    END IF;
+END;
+/

@@ -1,0 +1,23 @@
+CREATE OR REPLACE FUNCTION obtener_multiplos_de_tres(n IN NUMBER) 
+RETURN VARCHAR2 
+AS
+    resultado VARCHAR2(4000) := '';
+    contador NUMBER := 1;
+    multiplo NUMBER := 3;
+BEGIN
+    WHILE contador <= n LOOP
+        resultado := resultado || 'Múltiplo ' || contador || ' de 3: ' || TO_CHAR(multiplo) || CHR(10);
+        multiplo := multiplo + 3;
+        contador := contador + 1;
+    END LOOP;
+    RETURN resultado;
+END;
+/
+
+DECLARE
+    resultado VARCHAR2(4000);
+BEGIN
+    resultado := obtener_multiplos_de_tres(5);
+    DBMS_OUTPUT.PUT_LINE(resultado);
+END;
+/

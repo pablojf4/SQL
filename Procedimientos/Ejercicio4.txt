@@ -1,0 +1,28 @@
+CREATE OR REPLACE PROCEDURE calcular_factorial (
+    num IN INTEGER,
+    factorial OUT INTEGER
+)
+IS
+    resultado INTEGER := 1;
+BEGIN
+    IF num < 0 THEN
+        DBMS_OUTPUT.PUT_LINE('No se puede calcular el factorial de un número negativo.');
+        factorial := NULL;
+        RETURN;
+    END IF;
+
+    FOR i IN REVERSE 1..num LOOP
+        resultado := resultado * i;
+    END LOOP;
+
+    factorial := resultado;
+END;
+/
+
+DECLARE
+num INTEGER:=5;
+resultado_factorial INTEGER;
+BEGIN
+calcular_factorial(num, resultado_factorial);
+DBMS_OUTPUT.PUT_LINE('El factorial de '|| num || ' es:' || resultado_factorial);
+END;

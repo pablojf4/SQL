@@ -1,0 +1,13 @@
+CREATE OR REPLACE PROCEDURE mostrar_multiplos_de_tres (
+    n IN INTEGER
+)
+IS
+BEGIN
+    FOR i IN 1..n LOOP
+        DBMS_OUTPUT.PUT_LINE('Múltiplo ' || i || ': ' || (i * 3));
+    END LOOP;
+END;
+/
+BEGIN
+mostrar_multiplos_de_tres(5);
+END;

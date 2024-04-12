@@ -1,0 +1,21 @@
+CREATE OR REPLACE FUNCTION mostrar_divisores(numero IN NUMBER) RETURN VARCHAR2 IS
+    divisores VARCHAR2(4000) := 'Divisores de ' || numero || ': ';
+BEGIN
+    FOR i IN 1..numero LOOP
+        IF numero MOD i = 0 THEN
+            divisores := divisores || i || ' ';
+        END IF;
+    END LOOP;
+    
+    RETURN divisores;
+END;
+/
+
+DECLARE
+    num NUMBER := 12;
+    lista_divisores VARCHAR2(4000);
+BEGIN
+    lista_divisores := mostrar_divisores(num);
+    DBMS_OUTPUT.PUT_LINE(lista_divisores);
+END;
+/

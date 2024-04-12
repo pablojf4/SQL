@@ -1,0 +1,29 @@
+CREATE OR REPLACE PROCEDURE encontrar_menor (
+    num1 IN NUMBER,
+    num2 IN NUMBER,
+    num3 IN NUMBER
+)
+IS
+    menor NUMBER;
+BEGIN
+    -- Inicializamos la variable 'menor' con el valor de 'num1'
+    menor := num1;
+
+    -- Comprobamos si 'num2' es menor que 'menor'
+    IF num2 < menor THEN
+        menor := num2;
+    END IF;
+
+    -- Comprobamos si 'num3' es menor que 'menor'
+    IF num3 < menor THEN
+        menor := num3;
+    END IF;
+
+    -- Devolvemos el valor de 'menor'
+    DBMS_OUTPUT.PUT_LINE('El menor número es: ' || menor);
+END encontrar_menor;
+/
+
+BEGIN
+encontrar_menor(5,8,3);
+END;
