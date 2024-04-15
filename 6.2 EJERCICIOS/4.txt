@@ -1,0 +1,15 @@
+DECLARE
+    fecha_actual DATE := SYSDATE;
+    anio_actual NUMBER;
+BEGIN
+    -- Llama a la función anio y asigna el resultado a la variable anio_actual
+    anio_actual := anio(fecha_actual);
+    
+    -- Imprime el resultado
+    DBMS_OUTPUT.PUT_LINE('El año actual es: ' || anio_actual);
+EXCEPTION
+    -- Maneja cualquier error y muestra un mensaje
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error al obtener el año.');
+END;
+/

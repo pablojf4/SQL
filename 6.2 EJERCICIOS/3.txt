@@ -1,0 +1,21 @@
+CREATE OR REPLACE FUNCTION anio(fecha DATE) RETURN NUMBER IS
+    anio_numero NUMBER;
+BEGIN
+    -- Extraer el año de la fecha utilizando la función EXTRACT
+    SELECT EXTRACT(YEAR FROM fecha) INTO anio_numero FROM DUAL;
+    RETURN anio_numero;
+EXCEPTION
+    -- Manejar cualquier error y devolver NULL en caso de error
+    WHEN OTHERS THEN
+        RETURN NULL;
+END anio;
+/
+
+-- Obtener el año actual utilizando SYSDATE y la función anio
+DECLARE
+    anio_actual NUMBER;
+BEGIN
+    anio_actual := anio(SYSDATE);
+    DBMS_OUTPUT.PUT_LINE('El año actual es: ' || anio_actual);
+END;
+/

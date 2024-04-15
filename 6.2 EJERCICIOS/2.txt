@@ -1,0 +1,19 @@
+CREATE OR REPLACE PROCEDURE invierte (cadena VARCHAR2)
+IS
+    longitud NUMBER;
+    i NUMBER;
+    caracter CHAR(1);
+BEGIN
+    longitud := LENGTH(cadena);
+    i := longitud;
+
+    WHILE i > 0 LOOP
+        caracter := SUBSTR(cadena, i, 1);
+        DBMS_OUTPUT.PUT(caracter);
+        i := i - 1;
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE(''); -- Salto de línea al final
+END;
+/
+execute invierte('hola');

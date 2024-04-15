@@ -1,0 +1,8 @@
+CREATE OR REPLACE PROCEDURE suma(numero1 NUMBER, numero2 NUMBER) IS
+suma NUMBER:=0;
+BEGIN
+    suma:=numero1+numero2;
+DBMS_OUTPUT.PUT_LINE('La suma es: '||suma);
+END;
+/
+EXECUTE suma(10,30);
