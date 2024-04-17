@@ -1,0 +1,21 @@
+CREATE OR REPLACE PROCEDURE multiplosRango(valorMin NUMBER, valorMax NUMBER, numero NUMBER)
+AS
+multiplicador NUMBER:=1;
+resultado NUMBER;
+BEGIN
+IF valorMin>=valorMax THEN RAISE_APPLICATION_ERROR(-20001, 'El valor Mínimo debe ser menor que el valor Máximo');
+END IF;
+IF numero=0 THEN RAISE_APPLICATION_ERROR(-20002, 'El Número no puede ser cero');
+END IF;
+
+LOOP
+resultado:=valorMin * numero * multiplicador;
+DBMS_OUTPUT.PUT_LINE('Múltiplo '|| multiplicador || ': '|| resultado);
+multiplicador:= multiplicador +1;
+IF (valorMin * multiplicador * numero) > valorMax THEN EXIT;
+END IF;
+END LOOP;
+EXCEPTION WHEN OTHERS THEN RAISE_APPLICATION_ERROR(-20003, 'Error inesperado:');
+END multiplosRango;
+/
+EXECUTE multiplosRango(1,50,5)

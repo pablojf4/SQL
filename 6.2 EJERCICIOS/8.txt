@@ -1,0 +1,23 @@
+DECLARE
+    valorMin NUMBER := 9;
+    valorMax NUMBER := 50;
+    numero NUMBER := 5;
+    multiplo NUMBER;
+BEGIN
+    -- Encontrar el primer múltiplo de 5 mayor o igual que valorMin
+    IF MOD(valorMin, numero) = 0 THEN
+        multiplo := valorMin;
+    ELSE
+        multiplo := valorMin + (numero - MOD(valorMin, numero));
+    END IF;
+
+    -- Imprimir los múltiplos de 5 en el rango entre valorMin y valorMax
+    WHILE multiplo <= valorMax LOOP
+        DBMS_OUTPUT.PUT_LINE('Múltiplo de ' || numero || ': ' || multiplo);
+        multiplo := multiplo + numero;
+    END LOOP;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error inesperado.');
+END;
+/
