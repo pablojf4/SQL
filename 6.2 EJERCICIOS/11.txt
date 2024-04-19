@@ -1,0 +1,29 @@
+CREATE OR REPLACE FUNCTION filtraAlfanumericos(
+    cadena  VARCHAR2
+) RETURN VARCHAR2
+IS
+    cadena_filtrada VARCHAR2(1000) := '';
+    longitud NUMBER;
+    caracter CHAR(1);
+BEGIN
+    IF cadena IS NULL THEN
+        RETURN NULL;
+    END IF;
+
+    longitud := LENGTH(cadena);
+    FOR i IN 1..longitud LOOP
+        caracter := SUBSTR(cadena, i, 1);
+        IF (ASCII(caracter) >= 65 AND ASCII(caracter)<= 90) OR (ASCII(caracter) >= 97 AND ASCII(caracter)<= 122) THEN
+            cadena_filtrada := cadena_filtrada || caracter;
+        ELSE
+            cadena_filtrada := cadena_filtrada || '*';
+        END IF;
+    END LOOP;
+    RETURN cadena_filtrada;
+EXCEPTION
+    WHEN OTHERS THEN
+        RETURN NULL;
+END filtraAlfanumericos;
+/
+
+select filtraAlfanumericos('??¿¿?') from dual;

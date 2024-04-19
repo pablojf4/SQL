@@ -1,0 +1,16 @@
+DECLARE
+    valorMin NUMBER := 9;
+    valorMax NUMBER := 50;
+    numero NUMBER := 5;
+BEGIN
+    -- Encontrar el último múltiplo de 5 menor o igual que valorMax
+    FOR multiplo IN REVERSE valorMin..valorMax LOOP
+        IF MOD(multiplo, numero) = 0 THEN
+            DBMS_OUTPUT.PUT_LINE('Múltiplo de ' || numero || ': ' || multiplo);
+        END IF;
+    END LOOP;
+EXCEPTION
+    WHEN OTHERS THEN
+        DBMS_OUTPUT.PUT_LINE('Error inesperado.');
+END;
+/

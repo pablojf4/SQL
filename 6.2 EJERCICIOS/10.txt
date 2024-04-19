@@ -1,0 +1,17 @@
+CREATE OR REPLACE PROCEDURE sumaTresNumeros(
+    num1  NUMBER DEFAULT 0,
+    num2 NUMBER DEFAULT 0,
+    num3 NUMBER DEFAULT 0
+)
+IS
+    resultado NUMBER;
+BEGIN
+    resultado := num1 + num2 + num3;
+    DBMS_OUTPUT.PUT_LINE('La suma de los tres números es: ' || resultado);
+END sumaTresNumeros;
+/
+
+EXECUTE sumaTresNumeros(5);
+EXECUTE sumaTresNumeros(2,10);
+EXECUTE sumaTresNumeros(3,8,9);
+EXECUTE sumaTresNumeros(num3=>5, num1=>10, num2=>15);
