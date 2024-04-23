@@ -1,0 +1,16 @@
+DECLARE
+    v_num1 NUMBER;
+numero_invalido EXCEPTION;
+BEGIN
+v_num1:='tete';
+IF v_num1 < 1 OR v_num1 > 10 THEN
+raise numero_invalido;
+else
+dbms_output.put_line('El numero ingresado es: '||v_num1);
+end if;
+exception
+when numero_invalido then
+dbms_output.put_line('El numero tiene que estar entre 1 y 10');
+when others then
+dbms_output.put_line('Error inesperado');
+end;

@@ -1,0 +1,13 @@
+DECLARE
+    v_num1 NUMBER;
+BEGIN
+    v_num1 := 99;
+   if v_num1>=1 and v_num1<=10 then
+dbms_output.put_line('El numero ingresado es '||v_num1);
+else
+raise_application_error(-20001, 'El numero debe estar en el rango especificicado');
+end if;
+exception
+when others then
+dbms_output.put_line('Error inesperado: ');
+end

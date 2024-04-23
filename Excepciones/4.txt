@@ -1,0 +1,14 @@
+CREATE OR REPLACE PROCEDURE dividir(dividendo number, divisor number)
+is
+    division number;
+begin
+division:=dividendo/divisor;
+exception
+when zero_divide then
+dbms_output.put_line('No se puede entre 0');
+when others then
+dbms_output.put_line('Error desconocido');
+end;
+/
+execute dividir(20,'tete');
+    
